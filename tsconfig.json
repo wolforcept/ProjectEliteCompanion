@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "System",
+        "lib": [
+            "es5",
+            "es6",
+            "dom"
+        ],
+        "rootDir": "./assets/scripts/",
+        "outFile": "./assets/script.js"
+    }
+}

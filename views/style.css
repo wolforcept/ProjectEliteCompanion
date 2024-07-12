@@ -1,0 +1,179 @@
+@font-face {
+    font-family: "Manilla Cellos";
+    src: url("../assets/Manilla Cellos.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "nasalization";
+    src: url("../assets/nasalization.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "Neozoic";
+    src: url("../assets/Neozoic.ttf") format("truetype");
+}
+
+:root {
+    --spaceSmall: 3vw;
+    --spaceMedium: 6vw;
+    --spaceLarge: 10vw;
+    --orange: #ef5a32;
+    --dark: #1f1f1f;
+    --fontLarge: 10vw;
+    --fontMedium: 7vw;
+    --fontSmall: 5vw;
+    --font1: "Neozoic", "nasalization";
+    --font2: "nasalization";
+}
+
+div {
+    font-family: var(--font1);
+    font-size: var(--fontSmall);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: var(--font2);
+    font-size: var(--fontLarge);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.container {
+    padding: 0px;
+}
+
+.display-3 {
+    font-size: 2.0rem;
+}
+
+.jumbotron {
+    background: #00000000;
+}
+
+body {
+    color: rgb(217, 221, 224);
+    background-color: var(--dark);
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+}
+
+.app {
+    font-size: 30px;
+}
+
+#title,
+#menu,
+#settings,
+#content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+#content {
+    display: none;
+}
+
+#title svg {
+    width: 87%;
+    margin-top: var(--spaceMedium);
+}
+
+#phase {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-right: var(--spaceSmall);
+    border-radius: var(--spaceSmall);
+}
+
+.phaseIcon {
+    padding: var(--spaceSmall) 0 var(--spaceSmall) var(--spaceSmall);
+}
+
+.selected {
+    filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%);
+}
+
+button {
+    font-size: var(--fontSmall);
+    font-family: var(--font1);
+    background-color: var(--orange);
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: auto 50%;
+    border-radius: 2px;
+    border: none;
+    color: #ffffff;
+    padding: 5px 15px 5px 15px;
+
+    outline: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    color: black;
+    font-weight: bold;
+}
+
+button.big {
+    font-family: var(--font2);
+    font-size: var(--fontLarge);
+}
+
+select {
+    font-size: var(--fontSmall);
+    font-family: var(--font1);
+    background-color: var(--orange);
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: auto 50%;
+    border-radius: 2px;
+    border: none;
+    color: #ffffff;
+    padding: 5px 15px 5px 15px;
+
+    outline: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    color: black;
+    font-weight: bold;
+}
+
+.spacer-large {
+    height: var(--spaceLarge)
+}
+
+.spacer-medium {
+    height: var(--spaceMedium)
+}
+
+.spacer-small {
+    height: var(--spaceSmall)
+}
+
+.settings-row {
+    margin-bottom: var(--spaceSmall);
+}
+
+.settings-row :first-child {
+    width: 45vw;
+    display: inline-block;
+}
+
+.settings-row :nth-child(2) {
+    width: 35vw;
+    display: inline-block;
+}
