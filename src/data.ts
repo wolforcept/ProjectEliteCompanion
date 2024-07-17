@@ -1,8 +1,8 @@
 type Difficulty = "easy" | "medium" | "hard";
 const difficulties: Array<Difficulty> = ["easy", "medium", "hard"];
 
-type Phase = "event" | "spawn" | "boss" | "action" | "ability" | "movement" | "check";
-const phases = ["event", "spawn", "boss", "action", "ability", "movement", "check"];
+type Phase = "event" | "spawn" | "action" | "activation";
+const phases: Array<Phase> = ["event", "spawn", "action", "activation"];
 
 interface BossCard {
     id: number;
@@ -18,7 +18,7 @@ interface EventCard {
     simple: boolean;
     name: string;
     rules: string;
-    highlightPhase?: Phase;
+    highlightPhase?: Phase | "all";
     icons?: Array<string>;
 }
 
@@ -36,67 +36,68 @@ interface SwarmCard {
 // █▄▄ ▀▄▀ █▄▄ █ ▀█  █     ▀▄▄ █▀█ █▀▄ █▄▀ ▄█▀ 
 
 const event1: EventCard = {
-    id: 1, simple: false, name: "Speedy Spawn", icons: ["wrench", "wrench", "hand", "gun", "hand", "gun"],
-    rules: "At the end of the Alien Ability step, all aliens in a spawn point move 2 spaces.", highlightPhase: "ability"
+    id: 1, simple: false, name: "Speedy Spawn", icons: ["wrench", "wrench", "hand", "gun", "hand", "gun"], highlightPhase: "activation",
+    rules: "At the end of the Alien Ability step, all aliens in a spawn point move 2 spaces.",
 };
 const event2: EventCard = {
-    id: 2, simple: false, name: "Exhaustion", icons: ["gun", "gun", "gun", "search", "gun", "search"],
-    rules: "Hero's special abilities have no effect."
+    id: 2, simple: false, name: "Exhaustion", icons: ["gun", "gun", "gun", "search", "gun", "search"], highlightPhase: "all",
+    rules: "Hero's special abilities have no effect.",
 };
 const event3: EventCard = {
-    id: 3, simple: false, name: "Shell Shock", icons: ["wrench", "wrench", "gun", "wrench", "gun", "wrench"],
-    rules: "At the beginning of the Alien Ability step, each hero suffers 1 damage."
+    id: 3, simple: false, name: "Shell Shock", icons: ["wrench", "wrench", "gun", "wrench", "gun", "wrench"], highlightPhase: "activation",
+    rules: "At the beginning of the Alien Ability step, each hero suffers 1 damage.",
 };
 const event4: EventCard = {
-    id: 4, simple: false, name: "Proxy Horde", icons: ["search", "wrench", "hand", "gun", "hand", "gun"],
-    rules: "During the Alien Activation phase add +1 to all aliens movement value."
+    id: 4, simple: false, name: "Proxy Horde", icons: ["search", "wrench", "hand", "gun", "hand", "gun"], highlightPhase: "activation",
+    rules: "During the Alien Activation phase add +1 to all aliens movement value.",
 };
 const event5: EventCard = {
-    id: 5, simple: false, name: "Limited Equipments", icons: ["search", "search", "search", "search", "search", "search"],
-    rules: "Heroes may not perform Search Actions or draw Alien Tech cards."
+    id: 5, simple: false, name: "Limited Equipments", icons: ["search", "search", "search", "search", "search", "search"], highlightPhase: "action",
+    rules: "Heroes may not perform Search Actions or draw Alien Tech cards.",
 };
 const event6: EventCard = {
-    id: 6, simple: false, name: "Sudden Attack", icons: ["hand", "hand", "wrench", "hand", "wrench", "hand"],
-    rules: "All aliens have an additional ability: \"Roll 1 Hit Die for each hero within range 1: each hero suffers 1 damage on 4+.\""
+    id: 6, simple: false, name: "Sudden Attack", icons: ["hand", "hand", "wrench", "hand", "wrench", "hand"], highlightPhase: "activation",
+    rules: "All aliens have an additional ability: \"Roll 1 Hit Die for each hero within range 1: each hero suffers 1 damage on 4+.\"",
 };
 const event7: EventCard = {
-    id: 7, simple: false, name: "Proxies in Haste", icons: ["hand", "gun", "search", "wrench", "search", "wrench"],
-    rules: "Before the Alien Ability step, all aliens move 1 space."
+    id: 7, simple: false, name: "Proxies in Haste", icons: ["hand", "gun", "search", "wrench", "search", "wrench"], highlightPhase: "activation",
+    rules: "Before the Alien Ability step, all aliens move 1 space.",
 };
 const event8: EventCard = {
-    id: 8, simple: false, name: "Watch out for Bosses", icons: ["wrench", "hand", "gun", "search", "gun", "search"],
-    rules: "At the end of the spawning phase, reveal 1 additional Boss Spawn card.", highlightPhase: "spawn"
+    id: 8, simple: false, name: "Watch out for Bosses", icons: ["wrench", "hand", "gun", "search", "gun", "search"], highlightPhase: "spawn",
+    rules: "At the end of the spawning phase, reveal 1 additional Boss Spawn card.",
 };
 const event9: EventCard = {
-    id: 9, simple: false, name: "Large Numbers", icons: ["wrench", "wrench", "wrench", "wrench", "wrench", "wrench"],
-    rules: "During the spawning phase, whenever you spawn a swarm, spawn 1 additional figure of that type.", highlightPhase: "spawn"
+    id: 9, simple: false, name: "Large Numbers", icons: ["wrench", "wrench", "wrench", "wrench", "wrench", "wrench"], highlightPhase: "spawn",
+    rules: "During the spawning phase, whenever you spawn a swarm, spawn 1 additional figure of that type.",
 };
 const event10: EventCard = {
-    id: 10, simple: false, name: "Abrupt Shots", icons: ["hand", "hand", "hand", "gun", "hand", "gun"],
-    rules: "All aliens have an additional ability: \"Roll 1 Hit Die for each hero within range 3: each hero suffers 1 damage on 4+.\""
+    id: 10, simple: false, name: "Abrupt Shots", icons: ["hand", "hand", "hand", "gun", "hand", "gun"], highlightPhase: "activation",
+    rules: "All aliens have an additional ability: \"Roll 1 Hit Die for each hero within range 3: each hero suffers 1 damage on 4+.\"",
+
 };
 const event11: EventCard = {
-    id: 11, simple: false, name: "Out of Time", icons: ["wrench", "wrench", "hand", "hand", "hand", "hand"],
+    id: 11, simple: false, name: "Out of Time", icons: ["wrench", "wrench", "hand", "hand", "hand", "hand"], highlightPhase: "action",
     rules: "The Action phase lasts 20 seconds less."
 };
 const event12: EventCard = {
-    id: 12, simple: false, name: "Enraged Spawn", icons: ["hand", "hand", "search", "search", "search", "search"],
-    rules: "All Swarm Spawn cards have <img class=\"inText\" src=\"..\\assets\\svgs\\danger.svg\">.", highlightPhase: "spawn"
+    id: 12, simple: false, name: "Enraged Spawn", icons: ["hand", "hand", "search", "search", "search", "search"], highlightPhase: "spawn",
+    rules: "All Swarm Spawn cards have <img class=\"inText\" src=\".\\assets\\images\\light\\danger.svg\">.",
 };
 const event13: EventCard = {
-    id: 13, simple: false, name: "Overwhelmed", icons: ["gun", "search", "search", "wrench", "search", "wrench"],
-    rules: "Before the spawning phase, each hero must move 3 spaces following the alien path.", highlightPhase: "spawn"
+    id: 13, simple: false, name: "Overwhelmed", icons: ["gun", "search", "search", "wrench", "search", "wrench"], highlightPhase: "spawn",
+    rules: "Before the spawning phase, each hero must move 3 spaces following the alien path.",
 };
 const event14: EventCard = {
-    id: 14, simple: false, name: "Rampant Mutation", icons: ["wrench", "wrench", "wrench", "hand", "wrench", "hand"],
-    rules: "At the end of the spawning phase, all bosses gain 3 health.", highlightPhase: "spawn"
+    id: 14, simple: false, name: "Rampant Mutation", icons: ["wrench", "wrench", "wrench", "hand", "wrench", "hand"], highlightPhase: "spawn",
+    rules: "At the end of the spawning phase, all bosses gain 3 health.",
 };
 const event15: EventCard = {
-    id: 15, simple: false, name: "Endless Threat", icons: ["hand", "hand", "gun", "gun", "gun", "gun"],
-    rules: "At the end of the spawning phase, spawn an additional Swarm Spawn card.", highlightPhase: "spawn"
+    id: 15, simple: false, name: "Endless Threat", icons: ["hand", "hand", "gun", "gun", "gun", "gun"], highlightPhase: "spawn",
+    rules: "At the end of the spawning phase, spawn an additional Swarm Spawn card.",
 };
 const event16: EventCard = {
-    id: 16, simple: false, name: "Toxic Proxies", icons: ["hand", "hand", "wrench", "wrench", "wrench", "wrench"],
+    id: 16, simple: false, name: "Toxic Proxies", icons: ["hand", "hand", "wrench", "wrench", "wrench", "wrench"], highlightPhase: "spawn",
     rules: "At the end of the spawning phase, select 3 different aliens and place 1 acid token adjacent to each alien, following the alien path."
 };
 const event17: EventCard = {
@@ -234,7 +235,99 @@ const bossCards: Array<BossCard> = [
     },
 ]
 
+interface SavedGame {
+    timerEnd?: number;
+    currentEvents: Array<EventCard>;
+    currentBosses: Array<BossCard>;
+    eventDeck: Array<EventCard>;
+    swarmDeck: Array<SwarmCard>;
+    bossDeck: Array<BossCard>;
+}
+
+const timerSounds = ["alarm_1", "alarm_2", "alarm_3", "alarm_4", "bell_1", "bell_2", "bell_3", "siren_1", "siren_2", "siren_3", "siren_4", "siren_5",];
+
 class StaticData {
+
+    private static storageid_difficulty = "project_elite_companion_difficulty";
+    private static storageid_nrplayers = "project_elite_companion_nr_of_players";
+    private static storageid_savedGame = "project_elite_companion_saved_game";
+    private static storageid_timerSound = "project_elite_timer_sound";
+    private static storageid_roundTime = "project_elite_round_time";
+
+    static getRoundTime(): number {
+        let nr = parseInt(localStorage.getItem(StaticData.storageid_roundTime));
+        if (!nr) {
+            nr = 2 * 60 * 1000;
+            localStorage.setItem(StaticData.storageid_roundTime, "" + nr);
+        }
+        return nr;
+    }
+
+    static toggleRoundTime(): void {
+        let nr = StaticData.getRoundTime();
+        if (!nr) nr = 2 * 60 * 1000;
+        nr += 15000;
+        if (nr > 3 * 60 * 1000) nr = 15000;
+        localStorage.setItem(StaticData.storageid_roundTime, nr + "");
+    }
+
+    //
+
+    static getTimerSound(): string {
+        let val = localStorage.getItem(StaticData.storageid_timerSound);
+        if (!timerSounds.includes(val)) {
+            val = timerSounds[0];
+            localStorage.setItem(StaticData.storageid_timerSound, val);
+        }
+        return val;
+    }
+
+    static toggleTimerSound(): void {
+        let val = localStorage.getItem(StaticData.storageid_timerSound);
+        let newIndex = timerSounds.indexOf(val) + 1;
+        if (newIndex >= timerSounds.length) newIndex = 0;
+        localStorage.setItem(StaticData.storageid_timerSound, timerSounds[newIndex]);
+    }
+
+    //
+
+    static getDifficulty(): Difficulty {
+        let diff = localStorage.getItem(StaticData.storageid_difficulty);
+        if (diff != "easy" && diff != "medium" && diff != "hard") {
+            diff = "easy";
+            localStorage.setItem(StaticData.storageid_difficulty, diff);
+        }
+        return diff as Difficulty;
+    }
+
+    static toggleDifficulty(): void {
+        let diff = localStorage.getItem(StaticData.storageid_difficulty);
+        if (diff === "easy") diff = "medium";
+        else if (diff === "medium") diff = "hard";
+        else if (diff === "hard") diff = "easy";
+        localStorage.setItem(StaticData.storageid_difficulty, diff);
+    }
+
+    //
+
+    static getNrOfPlayers(): number {
+        let nr = parseInt(localStorage.getItem(StaticData.storageid_nrplayers));
+        if (!nr) {
+            nr = 4;
+            localStorage.setItem(StaticData.storageid_nrplayers, "" + nr);
+        }
+        return nr;
+    }
+
+    static toggleNrOfPlayers(): void {
+        let nr = StaticData.getNrOfPlayers();
+        if (!nr) nr = 4;
+        nr++;
+        if (nr > 6) nr = 1;
+        localStorage.setItem(StaticData.storageid_nrplayers, nr + "");
+    }
+
+    //
 
     static getXRandomEvents1To16(n: number): Array<EventCard> {
         const drawFrom: Array<EventCard> = [...events1to16];
@@ -243,15 +336,15 @@ class StaticData {
     }
 
     static makeEventsEasy(): Array<EventCard> {
-        return [event17, event18, event19, event20, event21, event22, event23, event24]
+        return [event17, event18, event19, event20, event21, event22, event23, event24];
     }
 
     static makeEventsMedium(): Array<EventCard> {
-        return [event20, event21, event22, event23, event24, ...this.getXRandomEvents1To16(3)]
+        return [event20, event21, event22, event23, event24, ...this.getXRandomEvents1To16(3)];
     }
 
     static makeEventsHard(): Array<EventCard> {
-        return [event22, event23, event24, event25, ...this.getXRandomEvents1To16(4)]
+        return [event22, event23, event24, event25, ...this.getXRandomEvents1To16(4)];
     }
 
     static makeBosses(): Array<BossCard> {
@@ -261,7 +354,87 @@ class StaticData {
     }
 
     static makeSwarmDeck(): Array<SwarmCard> {
-        return [...swarmCards];
+        const returnDeck = [...swarmCards];
+        Util.shuffle(returnDeck);
+        return returnDeck;
+    }
+
+    static makeEventDeck(diff: Difficulty): Array<EventCard> {
+        const returnDeck = diff === "medium" ? this.makeEventsMedium() : diff === "hard" ? this.makeEventsHard() : this.makeEventsEasy();
+        Util.shuffle(returnDeck);
+        return returnDeck;
+    }
+
+    static initSavedGame(): SavedGame {
+
+        const diff = StaticData.getDifficulty();
+        const nPlayers = StaticData.getNrOfPlayers();
+
+        const savedGame: SavedGame = {
+            currentEvents: [],
+            currentBosses: [],
+            eventDeck: (diff === "medium" ? StaticData.makeEventsMedium() : diff === "hard" ? StaticData.makeEventsHard() : StaticData.makeEventsEasy()),
+            swarmDeck: StaticData.makeSwarmDeck(),
+            bossDeck: StaticData.makeBosses(),
+        }
+
+        savedGame.eventDeck.forEach(ev => {
+            if (nPlayers < 6) ev.icons.splice(5, 1);
+            if (nPlayers < 5) ev.icons.splice(4, 1);
+            if (nPlayers < 4) ev.icons.splice(3, 1);
+            if (nPlayers < 3) ev.icons.splice(2, 1);
+        });
+
+        StaticData.save(savedGame);
+
+        console.log("Started new game with difficulty " + diff + " for " + nPlayers + " players");
+        return savedGame;
+    }
+
+    static drawEvent(savedGame: SavedGame): EventCard {
+        if (savedGame.eventDeck.length === 0) return undefined;
+        const eventCard = savedGame.eventDeck.splice(0, 1)[0];
+        if (!eventCard.simple)
+            savedGame.currentEvents.push(eventCard);
+        StaticData.save(savedGame);
+        return eventCard;
+    }
+
+    static drawSwarm(savedGame: SavedGame): SwarmCard {
+        if (savedGame.swarmDeck.length === 0)
+            savedGame.swarmDeck = this.makeSwarmDeck();
+        const swarmCard = savedGame.swarmDeck.splice(0, 1)[0];
+        StaticData.save(savedGame);
+        return swarmCard;
+    }
+
+    static drawBoss(savedGame: SavedGame): BossCard | undefined {
+        if (savedGame.bossDeck.length === 0) return undefined;
+        const bossCard = savedGame.bossDeck.splice(0, 1)[0];
+        savedGame.currentBosses.push(bossCard);
+        StaticData.save(savedGame);
+        return bossCard;
+    }
+
+    static removeEvent(savedGame: SavedGame, event: EventCard): void {
+        const eventIndex = savedGame.currentEvents.findIndex(ev => ev.id == event.id);
+        if (eventIndex >= 0) savedGame.currentEvents.splice(eventIndex, 1);
+        StaticData.save(savedGame);
+    }
+
+    static removeBoss(savedGame: SavedGame, boss: BossCard): void {
+        const bossIndex = savedGame.currentBosses.findIndex(ev => ev.id == boss.id);
+        if (bossIndex >= 0) savedGame.currentBosses.splice(bossIndex, 1);
+        StaticData.save(savedGame);
+    }
+
+    static load(): SavedGame {
+        let savedGame: SavedGame = JSON.parse(localStorage.getItem(StaticData.storageid_savedGame));
+        return savedGame;
+    }
+
+    static save(savedGame: SavedGame) {
+        localStorage.setItem(StaticData.storageid_savedGame, JSON.stringify(savedGame));
     }
 
 }
