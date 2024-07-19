@@ -886,18 +886,17 @@ var MenuScreen = /** @class */ (function (_super) {
 ///<reference path="GameScreen.ts" />
 var Main = /** @class */ (function () {
     function Main() {
-        var _this = this;
         this.menuScreen = new MenuScreen(this);
         this.gameScreen = new GameScreen(this);
         this.menuScreen.show();
         // setTimeout(() => this.menuScreen.startNewGame(), 333);
-        setTimeout(function () { return _this.menuScreen.continueSavedGame(); }, 333);
+        // setTimeout(() => this.menuScreen.continueSavedGame(), 333);
         // setTimeout(() => {
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         // }, 666);
-        setTimeout(function () { return _this.gameScreen.selectTab(1); }, 666);
+        // setTimeout(() => this.gameScreen.selectTab(1), 666);
     }
     return Main;
 }());
