@@ -260,6 +260,95 @@ body {
 #game .eventWrapper:has(.open):not(:has(.mini)) .buttons {
   display: flex;
 }
+#game .swarm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 8vw;
+}
+#game .swarm h3 {
+  text-align: center;
+  width: 50vw;
+  margin: 0;
+}
+#game .swarm .number {
+  width: 20vw;
+}
+#game .swarm .location {
+  display: flex;
+  flex-direction: row;
+  width: 20vw;
+}
+#game .swarm .location .circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 10vw;
+  width: 10vw;
+  box-sizing: border-box;
+  border-radius: 8vw;
+  border: 1.5vw solid var(--color_orange);
+  font-size: 5vw;
+}
+#game .swarm .location img.danger {
+  width: 10vw;
+}
+#game .boss {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  border-bottom: 2vw solid var(--color_orange);
+}
+#game .boss h3 {
+  font-size: 8vw;
+}
+#game .boss .row {
+  display: flex;
+  flex-direction: row;
+  width: 96vw;
+  gap: 2vw;
+}
+#game .boss .row .left img {
+  width: 30vw;
+}
+#game .boss .row .rules {
+  font-size: 4.5vw;
+}
+#game .boss .icons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  font-size: 10vw;
+}
+#game .boss .icons img {
+  height: 10vw;
+  transform: translateY(1.5vw);
+  margin-right: 2vw;
+}
+#game .boss .buttons {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+}
+#game .boss .buttons .leftButton {
+  width: 50vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.001);
+}
+#game .boss .buttons .rightButton {
+  width: 50vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.001);
+}
 #game .tabBox {
   color: var(--color_orange);
   display: flex;
@@ -278,6 +367,13 @@ body {
 }
 #game .tabBox[tab=event] .timer {
   font-size: 20vw;
+}
+#game .tabBox[tab=spawn] .separator {
+  border-top: 2vw solid var(--color_orange);
+  width: 100vw;
+}
+#game .tabBox[tab=spawn] .button {
+  margin: 2vw;
 }
 #game .tabBox[tab=action] .timer {
   font-size: 20vw;
@@ -414,6 +510,12 @@ body {
 #game #overlay .event .icons:has(> :last-child:nth-child(2)) {
   /* 1 element */
   grid-template-columns: 45vw 45vw;
+}
+#game #overlay .swarm {
+  color: var(--color_gray);
+}
+#game #overlay .swarm .circle {
+  border: 1.5vw solid var(--color_gray);
 }
 #game #overlay .button {
   background-color: var(--color_gray);

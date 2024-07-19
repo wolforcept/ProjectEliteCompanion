@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -131,92 +142,94 @@ var events1to16 = [event1, event2, event3, event4, event5, event6, event7, event
 // ▄█▀ ▀▄▀▄▀ █▀█ █▀▄ █ ▀ █    ▀▄▄ █▀█ █▀▄ █▄▀ ▄█▀ 
 var alarms = ["alarm_1", "alarm_3", "bell_1", "bell_3", "siren_2", "siren_4", "alarm_2", "alarm_4", "bell_2", "siren_1", "siren_3", "siren_5"];
 var swarmCards = [
-    { id: 1, alienType: "Shooter", number: 2, location: 1, move: true },
-    { id: 2, alienType: "Shooter", number: 2, location: 2, move: true },
-    { id: 3, alienType: "Shooter", number: 2, location: 3, move: true },
-    { id: 4, alienType: "Shooter", number: 3, location: 1, move: false },
-    { id: 5, alienType: "Shooter", number: 3, location: 1, move: false },
-    { id: 6, alienType: "Shooter", number: 3, location: 2, move: false },
-    { id: 7, alienType: "Shooter", number: 3, location: 2, move: false },
-    { id: 8, alienType: "Shooter", number: 3, location: 3, move: false },
-    { id: 9, alienType: "Shooter", number: 3, location: 3, move: false },
-    { id: 10, alienType: "Shooter", number: 5, location: 0, move: false },
-    { id: 11, alienType: "Biter", number: 2, location: 1, move: true },
-    { id: 12, alienType: "Biter", number: 2, location: 2, move: true },
-    { id: 13, alienType: "Biter", number: 2, location: 3, move: true },
-    { id: 14, alienType: "Biter", number: 3, location: 1, move: true },
-    { id: 15, alienType: "Biter", number: 3, location: 2, move: true },
-    { id: 16, alienType: "Biter", number: 3, location: 3, move: true },
-    { id: 17, alienType: "Biter", number: 4, location: 1, move: false },
-    { id: 18, alienType: "Biter", number: 4, location: 2, move: false },
-    { id: 19, alienType: "Biter", number: 4, location: 3, move: false },
-    { id: 20, alienType: "Biter", number: 5, location: 0, move: false },
-    { id: 21, alienType: "Runner", number: 2, location: 1, move: true },
-    { id: 22, alienType: "Runner", number: 2, location: 2, move: true },
-    { id: 23, alienType: "Runner", number: 2, location: 3, move: true },
-    { id: 24, alienType: "Runner", number: 3, location: 1, move: true },
-    { id: 25, alienType: "Runner", number: 3, location: 1, move: true },
-    { id: 26, alienType: "Runner", number: 3, location: 2, move: true },
-    { id: 27, alienType: "Runner", number: 3, location: 2, move: true },
-    { id: 28, alienType: "Runner", number: 3, location: 3, move: true },
-    { id: 29, alienType: "Runner", number: 3, location: 3, move: true },
-    { id: 30, alienType: "Runner", number: 5, location: 0, move: false },
+    { id: 1, alienType: "Shooter", number: 2, location: 1, activate: true },
+    { id: 2, alienType: "Shooter", number: 2, location: 2, activate: true },
+    { id: 3, alienType: "Shooter", number: 2, location: 3, activate: true },
+    { id: 4, alienType: "Shooter", number: 3, location: 1, activate: false },
+    { id: 5, alienType: "Shooter", number: 3, location: 1, activate: false },
+    { id: 6, alienType: "Shooter", number: 3, location: 2, activate: false },
+    { id: 7, alienType: "Shooter", number: 3, location: 2, activate: false },
+    { id: 8, alienType: "Shooter", number: 3, location: 3, activate: false },
+    { id: 9, alienType: "Shooter", number: 3, location: 3, activate: false },
+    { id: 10, alienType: "Shooter", number: 5, location: 0, activate: false },
+    { id: 11, alienType: "Biter", number: 2, location: 1, activate: true },
+    { id: 12, alienType: "Biter", number: 2, location: 2, activate: true },
+    { id: 13, alienType: "Biter", number: 2, location: 3, activate: true },
+    { id: 14, alienType: "Biter", number: 3, location: 1, activate: true },
+    { id: 15, alienType: "Biter", number: 3, location: 2, activate: true },
+    { id: 16, alienType: "Biter", number: 3, location: 3, activate: true },
+    { id: 17, alienType: "Biter", number: 4, location: 1, activate: false },
+    { id: 18, alienType: "Biter", number: 4, location: 2, activate: false },
+    { id: 19, alienType: "Biter", number: 4, location: 3, activate: false },
+    { id: 20, alienType: "Biter", number: 5, location: 0, activate: false },
+    { id: 21, alienType: "Runner", number: 2, location: 1, activate: true },
+    { id: 22, alienType: "Runner", number: 2, location: 2, activate: true },
+    { id: 23, alienType: "Runner", number: 2, location: 3, activate: true },
+    { id: 24, alienType: "Runner", number: 3, location: 1, activate: true },
+    { id: 25, alienType: "Runner", number: 3, location: 1, activate: true },
+    { id: 26, alienType: "Runner", number: 3, location: 2, activate: true },
+    { id: 27, alienType: "Runner", number: 3, location: 2, activate: true },
+    { id: 28, alienType: "Runner", number: 3, location: 3, activate: true },
+    { id: 29, alienType: "Runner", number: 3, location: 3, activate: true },
+    { id: 30, alienType: "Runner", number: 5, location: 0, activate: false },
 ];
+// ██▄ ▄▀▄ ▄▀▀ ▄▀▀    ▄▀▀ ▄▀▄ █▀▄ █▀▄ ▄▀▀ 
+// █▄█ ▀▄▀ ▄█▀ ▄█▀    ▀▄▄ █▀█ █▀▄ █▄▀ ▄█▀ 
 var bossCards = [
     {
-        id: 1, name: "Searsting", hp: 3, movement: 3, move: true,
+        id: 1, name: "Searsting", health: 3, movement: 3, activate: true,
         rules: "Heroes within range 2 suffer 1 damage."
     },
     {
-        id: 2, name: "Ashar", hp: 3, movement: 4, move: true,
+        id: 2, name: "Ashar", health: 3, movement: 4, activate: true,
         rules: "Roll 1 Hit Die for each hero within range 4: each hero suffers 1 damage on 3+."
     },
     {
-        id: 3, name: "Reanimated Harrier", hp: 4, movement: 1, move: true,
+        id: 3, name: "Reanimated Harrier", health: 4, movement: 1, activate: true,
         rules: "Move any aliens a total of 4 spaces combined."
     },
     {
-        id: 4, name: "The Commandant", hp: 4, movement: 2, move: true,
+        id: 4, name: "The Commandant", health: 4, movement: 2, activate: true,
         rules: "Roll 3 Hit Dice. For each 4+: adjacent heroes suffer 1 damage and the commandant moves 1 space."
     },
     {
-        id: 5, name: "Dreadspit", hp: 4, movement: 3, move: true,
+        id: 5, name: "Dreadspit", health: 4, movement: 3, activate: true,
         rules: "Place 1 Acid Token on an adjacent space, following the alien path. Any hero in that space suffers 1 damage."
     },
     {
-        id: 6, name: "Naga", hp: 4, movement: 3, move: true,
+        id: 6, name: "Naga", health: 4, movement: 3, activate: true,
         rules: "Place 1 Slime Token on an adjacent space, following the alien path."
     },
     {
-        id: 7, name: "Matriarch", hp: 5, movement: "X", move: true,
+        id: 7, name: "Matriarch", health: 5, movement: "X", activate: true,
         rules: "Spawn 1 plagueling in each adjacent unoccupied space. X = Number of plaguelings just spawned."
     },
     {
-        id: 8, name: "Shepherd", hp: 5, movement: 2, move: true,
+        id: 8, name: "Shepherd", health: 5, movement: 2, activate: true,
         rules: "Each hero within range 3 suffers 1 damage (ignore LoS). Move these heroes 3 spaces following the alien path."
     },
     {
-        id: 9, name: "Gutslug", hp: 5, movement: 2, move: true,
+        id: 9, name: "Gutslug", health: 5, movement: 2, activate: true,
         rules: "Reveal and spawn 1 swarm spawn card. Use Gutslug's adjacent spaces as spawn points instead of the card's location."
     },
     {
-        id: 10, name: "Bounty", hp: 5, movement: 3, move: true,
+        id: 10, name: "Bounty", health: 5, movement: 3, activate: true,
         rules: "Roll 1 hit die for each hero within range 4: each hero suffers 2 damage on 4+."
     },
     {
-        id: 11, name: "Reanimated Crawler", hp: 6, movement: 1, move: true,
+        id: 11, name: "Reanimated Crawler", health: 6, movement: 1, activate: true,
         rules: "When killed, place its figure next to the map. At the end of the next spawning phase, spawn it again."
     },
     {
-        id: 12, name: "Mindeater", hp: 6, movement: 2, move: true,
+        id: 12, name: "Mindeater", health: 6, movement: 2, activate: true,
         rules: "All aliens within range 3 (ignoring LoS) mvoe 1 space."
     },
     {
-        id: 13, name: "Thraex", hp: 6, movement: 2, move: true,
+        id: 13, name: "Thraex", health: 6, movement: 2, activate: true,
         rules: "Heroes within range 3 suffer 1 damage. Heroes within range 1 suffer 1 additional damage."
     },
     {
-        id: 14, name: "Gorgon", hp: 7, movement: 4, move: true,
+        id: 14, name: "Gorgon", health: 7, movement: 4, activate: true,
         rules: "Restore to full health. Heroes within range 2 cannot move during the Action phase but can be pushed."
     },
 ];
@@ -329,6 +342,7 @@ var StaticData = /** @class */ (function () {
         var nPlayers = StaticData.getNrOfPlayers();
         var savedGame = {
             currentEvents: [],
+            drawnSwarms: [],
             currentBosses: [],
             eventDeck: (diff === "medium" ? StaticData.makeEventsMedium() : diff === "hard" ? StaticData.makeEventsHard() : StaticData.makeEventsEasy()),
             swarmDeck: StaticData.makeSwarmDeck(),
@@ -361,6 +375,7 @@ var StaticData = /** @class */ (function () {
         if (savedGame.swarmDeck.length === 0)
             savedGame.swarmDeck = this.makeSwarmDeck();
         var swarmCard = savedGame.swarmDeck.splice(0, 1)[0];
+        savedGame.drawnSwarms.push(swarmCard);
         StaticData.save(savedGame);
         return swarmCard;
     };
@@ -368,9 +383,14 @@ var StaticData = /** @class */ (function () {
         if (savedGame.bossDeck.length === 0)
             return undefined;
         var bossCard = savedGame.bossDeck.splice(0, 1)[0];
-        savedGame.currentBosses.push(bossCard);
+        savedGame.currentBosses.push(__assign(__assign({}, bossCard), { currentHealth: bossCard.health }));
         StaticData.save(savedGame);
         return bossCard;
+    };
+    StaticData.addDamageToBoss = function (savedGame, id, val) {
+        var boss = savedGame.currentBosses.filter(function (x) { return x.id === id; })[0];
+        boss.currentHealth -= val;
+        StaticData.save(savedGame);
     };
     StaticData.removeEvent = function (savedGame, event) {
         var eventIndex = savedGame.currentEvents.findIndex(function (ev) { return ev.id == event.id; });
@@ -390,6 +410,10 @@ var StaticData = /** @class */ (function () {
     };
     StaticData.save = function (savedGame) {
         localStorage.setItem(StaticData.storageid_savedGame, JSON.stringify(savedGame));
+    };
+    // UTIL
+    StaticData.getNrOfSwarmCardsDrawn = function () {
+        return StaticData.getNrOfPlayers() + (StaticData.getDifficulty() === "hard" ? 1 : 0);
     };
     StaticData.storageid_difficulty = "project_elite_companion_difficulty";
     StaticData.storageid_nrplayers = "project_elite_companion_nr_of_players";
@@ -447,8 +471,10 @@ var GameScreen = /** @class */ (function (_super) {
         return _this;
     }
     GameScreen.prototype.selectTab = function (i) {
-        this.remakeCurrentEventsBox(i < phases.length ? phases[i] : undefined);
-        this.remakeCurrentBossesBox();
+        var phase = i < phases.length ? phases[i] : "settings";
+        console.log(phase);
+        this.remakeCurrentEventsBox(phase);
+        this.remakeCurrentBossesBox(i, phase);
         this.tabIcons.forEach(function (tabIcon) { return tabIcon.removeClass("selected"); });
         this.tabIcons[i].addClass("selected");
         this.tabBox.empty();
@@ -463,41 +489,21 @@ var GameScreen = /** @class */ (function (_super) {
     GameScreen.prototype.remakeCurrentEventsBox = function (phase) {
         var _this = this;
         this.currentEventBox.empty();
-        if (!phase)
+        if (!phase || phase === "settings" || phase === "event")
             return;
         this.savedGame.currentEvents.forEach(function (ev) {
-            if (ev.highlightPhase === phase || phase === "event" || ev.highlightPhase === "all") {
+            if (ev.highlightPhase === phase || ev.highlightPhase === "all") {
                 var eventDiv = _this.makeEvent(ev, true);
                 _this.currentEventBox.append(eventDiv);
             }
         });
     };
-    GameScreen.prototype.remakeCurrentBossesBox = function (phase) {
+    GameScreen.prototype.remakeCurrentBossesBox = function (currentTab, phase) {
         var _this = this;
         this.currentBossesBox.empty();
-        if (!phase)
+        if (!phase || phase === "settings" || phase === "spawn")
             return;
-        this.savedGame.currentBosses.forEach(function (ev) { return _this.currentEventBox.append(_this.makeBoss(ev)); });
-    };
-    GameScreen.prototype.makeBoss = function (bossCard, isMini, isLight) {
-        if (isMini === void 0) { isMini = false; }
-        if (isLight === void 0) { isLight = false; }
-        if (!bossCard)
-            return;
-        var eventDiv = $("<div class=\"event".concat(isMini ? " mini" : "", "\"></div>"));
-        var title = $("<h3>".concat(bossCard.name, "</h3>"));
-        var rulesStr = isLight ? bossCard.rules.replace("images\\light", "images\\dark") : bossCard.rules;
-        var rules = $("<div class=\"rules\">".concat(rulesStr, "</div>"));
-        console.log(bossCard.rules);
-        // const iconsDiv = $(`<div class="icons"></div>`);
-        // bossCard.icons.forEach(icon => {
-        //     const iconDiv = $(`<div class="icon"><img src="./assets/images/dark/${icon}.svg"></div>`);
-        //     iconsDiv.append(iconDiv);
-        // })
-        eventDiv.append(title);
-        eventDiv.append(rules);
-        // eventDiv.append(iconsDiv);
-        return eventDiv;
+        this.savedGame.currentBosses.forEach(function (card) { return _this.currentBossesBox.append(_this.makeBoss(card, currentTab)); });
     };
     // EVENT PHASE
     GameScreen.prototype.makeEvent = function (eventCard, isMini, isLight) {
@@ -548,6 +554,63 @@ var GameScreen = /** @class */ (function (_super) {
         this.tabBox.append(drawEventButton);
     };
     // SPAWN PHASE
+    GameScreen.prototype.makeSwarm = function (swarmCard, index, fromOverlay) {
+        if (fromOverlay === void 0) { fromOverlay = false; }
+        if (!swarmCard)
+            return;
+        var div = $("<div class=\"swarm\" style=\"opacity:".concat(100 - index * 15, "%\"></div>"));
+        var title = $("<h3>".concat(swarmCard.alienType, "</h3>"));
+        var number = $("<div class=\"number\">".concat(swarmCard.number, "x</div>"));
+        var location = $("<div class=\"location\"><div class=\"circle\">".concat(swarmCard.location === 0 ? "?" : swarmCard.location, "</div></div>"));
+        div.append(number);
+        div.append(title);
+        div.append(location);
+        if (swarmCard.activate) {
+            var danger = $("<img class=\"danger\" src=\"./assets/images/".concat(fromOverlay ? "dark" : "light", "/danger.svg\">"));
+            location.append(danger);
+        }
+        return div;
+    };
+    GameScreen.prototype.makeBoss = function (bossCard, currentTab, isMini, fromOverlay) {
+        var _this = this;
+        if (isMini === void 0) { isMini = false; }
+        if (fromOverlay === void 0) { fromOverlay = false; }
+        if (!bossCard || bossCard.currentHealth <= 0)
+            return;
+        var light = fromOverlay ? "dark" : "light";
+        var div = $("<div class=\"boss".concat(isMini ? " mini" : "", "\"></div>"));
+        var title = $("<h3>".concat(bossCard.name, "</h3>"));
+        var image = $("<img src=\"./assets/images/boss/".concat(light, "/").concat(bossCard.id, ".svg\">"));
+        var rulesStr = fromOverlay ? bossCard.rules.replace("images\\light", "images\\dark") : bossCard.rules;
+        var rules = $("<div class=\"rules\">".concat(rulesStr, "</div>"));
+        var icons = $("<div class=\"icons\">\n                <div class=\"health\"><img src=\"./assets/images/".concat(light, "/health.svg\">").concat(bossCard.currentHealth, "</div>\n                <div class=\"activate").concat(bossCard.activate ? "" : " hide", "\"><img src=\"./assets/images/").concat(light, "/danger.svg\"></div>\n                <div class=\"movement\"><img src=\"./assets/images/").concat(light, "/alien_move.svg\">").concat(bossCard.movement, "</div>\n            </div>"));
+        var left = $("<div class=\"left\"></div>");
+        var right = $("<div class=\"right\"></div>");
+        var row = $("<div class=\"row\"></div>");
+        left.append(image);
+        right.append(rules);
+        row.append(left);
+        row.append(right);
+        div.append(title);
+        div.append(row);
+        div.append(icons);
+        {
+            var gotoTab_1 = currentTab;
+            var addDamage_1 = function (v) {
+                StaticData.addDamageToBoss(_this.savedGame, bossCard.id, v);
+                _this.selectTab(gotoTab_1);
+            };
+            var buttons = $("<div class=\"buttons\"></div>");
+            var leftButton = $("<div class=\"leftButton\"></div>");
+            var rightButton = $("<div class=\"rightButton\"></div>");
+            leftButton.on('click', function () { return addDamage_1(1); });
+            rightButton.on('click', function () { return addDamage_1(-1); });
+            buttons.append(leftButton);
+            buttons.append(rightButton);
+            div.append(buttons);
+        }
+        return div;
+    };
     GameScreen.prototype.remakeTabSpawn = function () {
         var _this = this;
         var drawSwarmCard = function () {
@@ -555,24 +618,27 @@ var GameScreen = /** @class */ (function (_super) {
             if (!swarmCard)
                 return;
             _this.selectTab(1);
-            // show last drawn swarm cards
+            _this.showOverlay(_this.makeSwarm(swarmCard, 0, true));
         };
         var drawBossCard = function () {
             var bossCard = StaticData.drawBoss(_this.savedGame);
             if (!bossCard)
                 return;
             _this.selectTab(1);
-            // show last drawn swarm cards
         };
         this.tabBox.attr("tab", "spawn");
-        this.tabBox.append($("<h3>ALIEN SPAWN</h3>"));
         var drawSwarmCardButton = $("<div class=\"button\">DRAW SWARM (".concat(this.savedGame.swarmDeck.length, ")</div>"));
-        drawSwarmCardButton.on('click', function () { return drawSwarmCard(); });
+        drawSwarmCardButton.on('click', drawSwarmCard);
         var drawBossCardButton = $("<div class=\"button\">DRAW BOSS (".concat(this.savedGame.bossDeck.length, ")</div>"));
-        drawBossCardButton.on('click', function () { return drawBossCard(); });
-        // draw last boss and swarm cards
-        // this.savedGame.currentEvents.forEach((ev: EventCard) => this.tabBox.append(this.makeEvent(ev)));
+        drawBossCardButton.on('click', drawBossCard);
+        (__spreadArray([], this.savedGame.drawnSwarms, true))
+            .reverse()
+            .splice(0, StaticData.getNrOfSwarmCardsDrawn())
+            .forEach(function (card, index) { return _this.tabBox.prepend(_this.makeSwarm(card, index)); });
+        this.tabBox.prepend($("<h3>ALIEN SPAWN</h3>"));
         this.tabBox.append(drawSwarmCardButton);
+        this.tabBox.append($("<div class=\"separator\"><div/>"));
+        this.savedGame.currentBosses.forEach(function (card) { return _this.tabBox.append(_this.makeBoss(card, 1)); });
         this.tabBox.append(drawBossCardButton);
     };
     GameScreen.prototype.stopTimer = function (shouldStopAudio) {
@@ -820,18 +886,18 @@ var MenuScreen = /** @class */ (function (_super) {
 ///<reference path="GameScreen.ts" />
 var Main = /** @class */ (function () {
     function Main() {
+        var _this = this;
         this.menuScreen = new MenuScreen(this);
         this.gameScreen = new GameScreen(this);
         this.menuScreen.show();
         // setTimeout(() => this.menuScreen.startNewGame(), 333);
-        // setTimeout(() => this.menuScreen.continueSavedGame(), 333);
+        setTimeout(function () { return _this.menuScreen.continueSavedGame(); }, 333);
         // setTimeout(() => {
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         //     StaticData.drawEvent(this.gameScreen.savedGame);
         // }, 666);
-        // setTimeout(() => this.gameScreen.selectTab(3), 666);
-        // // setTimeout(() => this.gameScreen.selectTab(1), 1333);
+        setTimeout(function () { return _this.gameScreen.selectTab(1); }, 666);
     }
     return Main;
 }());

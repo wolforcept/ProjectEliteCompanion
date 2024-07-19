@@ -7,9 +7,9 @@ const phases: Array<Phase> = ["event", "spawn", "action", "activation"];
 interface BossCard {
     id: number;
     name: string;
-    hp: number;
+    health: number;
     movement: number | string;
-    move: boolean;
+    activate: boolean;
     rules: string;
 }
 
@@ -29,7 +29,7 @@ interface SwarmCard {
     alienType: AlienType;
     number: number;
     location: number;
-    move: boolean;
+    activate: boolean;
 }
 
 // ██▀ █ █ ██▀ █▄ █ ▀█▀    ▄▀▀ ▄▀▄ █▀▄ █▀▄ ▄▀▀ 
@@ -144,101 +144,109 @@ const events1to16 = [event1, event2, event3, event4, event5, event6, event7, eve
 
 const alarms = ["alarm_1", "alarm_3", "bell_1", "bell_3", "siren_2", "siren_4", "alarm_2", "alarm_4", "bell_2", "siren_1", "siren_3", "siren_5"];
 const swarmCards: Array<SwarmCard> = [
-    { id: 1, alienType: "Shooter", number: 2, location: 1, move: true },
-    { id: 2, alienType: "Shooter", number: 2, location: 2, move: true },
-    { id: 3, alienType: "Shooter", number: 2, location: 3, move: true },
-    { id: 4, alienType: "Shooter", number: 3, location: 1, move: false },
-    { id: 5, alienType: "Shooter", number: 3, location: 1, move: false },
-    { id: 6, alienType: "Shooter", number: 3, location: 2, move: false },
-    { id: 7, alienType: "Shooter", number: 3, location: 2, move: false },
-    { id: 8, alienType: "Shooter", number: 3, location: 3, move: false },
-    { id: 9, alienType: "Shooter", number: 3, location: 3, move: false },
-    { id: 10, alienType: "Shooter", number: 5, location: 0, move: false },
-    { id: 11, alienType: "Biter", number: 2, location: 1, move: true },
-    { id: 12, alienType: "Biter", number: 2, location: 2, move: true },
-    { id: 13, alienType: "Biter", number: 2, location: 3, move: true },
-    { id: 14, alienType: "Biter", number: 3, location: 1, move: true },
-    { id: 15, alienType: "Biter", number: 3, location: 2, move: true },
-    { id: 16, alienType: "Biter", number: 3, location: 3, move: true },
-    { id: 17, alienType: "Biter", number: 4, location: 1, move: false },
-    { id: 18, alienType: "Biter", number: 4, location: 2, move: false },
-    { id: 19, alienType: "Biter", number: 4, location: 3, move: false },
-    { id: 20, alienType: "Biter", number: 5, location: 0, move: false },
-    { id: 21, alienType: "Runner", number: 2, location: 1, move: true },
-    { id: 22, alienType: "Runner", number: 2, location: 2, move: true },
-    { id: 23, alienType: "Runner", number: 2, location: 3, move: true },
-    { id: 24, alienType: "Runner", number: 3, location: 1, move: true },
-    { id: 25, alienType: "Runner", number: 3, location: 1, move: true },
-    { id: 26, alienType: "Runner", number: 3, location: 2, move: true },
-    { id: 27, alienType: "Runner", number: 3, location: 2, move: true },
-    { id: 28, alienType: "Runner", number: 3, location: 3, move: true },
-    { id: 29, alienType: "Runner", number: 3, location: 3, move: true },
-    { id: 30, alienType: "Runner", number: 5, location: 0, move: false },
+    { id: 1, alienType: "Shooter", number: 2, location: 1, activate: true },
+    { id: 2, alienType: "Shooter", number: 2, location: 2, activate: true },
+    { id: 3, alienType: "Shooter", number: 2, location: 3, activate: true },
+    { id: 4, alienType: "Shooter", number: 3, location: 1, activate: false },
+    { id: 5, alienType: "Shooter", number: 3, location: 1, activate: false },
+    { id: 6, alienType: "Shooter", number: 3, location: 2, activate: false },
+    { id: 7, alienType: "Shooter", number: 3, location: 2, activate: false },
+    { id: 8, alienType: "Shooter", number: 3, location: 3, activate: false },
+    { id: 9, alienType: "Shooter", number: 3, location: 3, activate: false },
+    { id: 10, alienType: "Shooter", number: 5, location: 0, activate: false },
+    { id: 11, alienType: "Biter", number: 2, location: 1, activate: true },
+    { id: 12, alienType: "Biter", number: 2, location: 2, activate: true },
+    { id: 13, alienType: "Biter", number: 2, location: 3, activate: true },
+    { id: 14, alienType: "Biter", number: 3, location: 1, activate: true },
+    { id: 15, alienType: "Biter", number: 3, location: 2, activate: true },
+    { id: 16, alienType: "Biter", number: 3, location: 3, activate: true },
+    { id: 17, alienType: "Biter", number: 4, location: 1, activate: false },
+    { id: 18, alienType: "Biter", number: 4, location: 2, activate: false },
+    { id: 19, alienType: "Biter", number: 4, location: 3, activate: false },
+    { id: 20, alienType: "Biter", number: 5, location: 0, activate: false },
+    { id: 21, alienType: "Runner", number: 2, location: 1, activate: true },
+    { id: 22, alienType: "Runner", number: 2, location: 2, activate: true },
+    { id: 23, alienType: "Runner", number: 2, location: 3, activate: true },
+    { id: 24, alienType: "Runner", number: 3, location: 1, activate: true },
+    { id: 25, alienType: "Runner", number: 3, location: 1, activate: true },
+    { id: 26, alienType: "Runner", number: 3, location: 2, activate: true },
+    { id: 27, alienType: "Runner", number: 3, location: 2, activate: true },
+    { id: 28, alienType: "Runner", number: 3, location: 3, activate: true },
+    { id: 29, alienType: "Runner", number: 3, location: 3, activate: true },
+    { id: 30, alienType: "Runner", number: 5, location: 0, activate: false },
 ]
+
+// ██▄ ▄▀▄ ▄▀▀ ▄▀▀    ▄▀▀ ▄▀▄ █▀▄ █▀▄ ▄▀▀ 
+// █▄█ ▀▄▀ ▄█▀ ▄█▀    ▀▄▄ █▀█ █▀▄ █▄▀ ▄█▀ 
 
 const bossCards: Array<BossCard> = [
     {
-        id: 1, name: "Searsting", hp: 3, movement: 3, move: true,
+        id: 1, name: "Searsting", health: 3, movement: 3, activate: true,
         rules: "Heroes within range 2 suffer 1 damage."
     },
     {
-        id: 2, name: "Ashar", hp: 3, movement: 4, move: true,
+        id: 2, name: "Ashar", health: 3, movement: 4, activate: true,
         rules: "Roll 1 Hit Die for each hero within range 4: each hero suffers 1 damage on 3+."
     },
     {
-        id: 3, name: "Reanimated Harrier", hp: 4, movement: 1, move: true,
+        id: 3, name: "Reanimated Harrier", health: 4, movement: 1, activate: true,
         rules: "Move any aliens a total of 4 spaces combined."
     },
     {
-        id: 4, name: "The Commandant", hp: 4, movement: 2, move: true,
+        id: 4, name: "The Commandant", health: 4, movement: 2, activate: true,
         rules: "Roll 3 Hit Dice. For each 4+: adjacent heroes suffer 1 damage and the commandant moves 1 space."
     },
     {
-        id: 5, name: "Dreadspit", hp: 4, movement: 3, move: true,
+        id: 5, name: "Dreadspit", health: 4, movement: 3, activate: true,
         rules: "Place 1 Acid Token on an adjacent space, following the alien path. Any hero in that space suffers 1 damage."
     },
     {
-        id: 6, name: "Naga", hp: 4, movement: 3, move: true,
+        id: 6, name: "Naga", health: 4, movement: 3, activate: true,
         rules: "Place 1 Slime Token on an adjacent space, following the alien path."
     },
     {
-        id: 7, name: "Matriarch", hp: 5, movement: "X", move: true,
+        id: 7, name: "Matriarch", health: 5, movement: "X", activate: true,
         rules: "Spawn 1 plagueling in each adjacent unoccupied space. X = Number of plaguelings just spawned."
     },
     {
-        id: 8, name: "Shepherd", hp: 5, movement: 2, move: true,
+        id: 8, name: "Shepherd", health: 5, movement: 2, activate: true,
         rules: "Each hero within range 3 suffers 1 damage (ignore LoS). Move these heroes 3 spaces following the alien path."
     },
     {
-        id: 9, name: "Gutslug", hp: 5, movement: 2, move: true,
+        id: 9, name: "Gutslug", health: 5, movement: 2, activate: true,
         rules: "Reveal and spawn 1 swarm spawn card. Use Gutslug's adjacent spaces as spawn points instead of the card's location."
     },
     {
-        id: 10, name: "Bounty", hp: 5, movement: 3, move: true,
+        id: 10, name: "Bounty", health: 5, movement: 3, activate: true,
         rules: "Roll 1 hit die for each hero within range 4: each hero suffers 2 damage on 4+."
     },
     {
-        id: 11, name: "Reanimated Crawler", hp: 6, movement: 1, move: true,
+        id: 11, name: "Reanimated Crawler", health: 6, movement: 1, activate: true,
         rules: "When killed, place its figure next to the map. At the end of the next spawning phase, spawn it again."
     },
     {
-        id: 12, name: "Mindeater", hp: 6, movement: 2, move: true,
+        id: 12, name: "Mindeater", health: 6, movement: 2, activate: true,
         rules: "All aliens within range 3 (ignoring LoS) mvoe 1 space."
     },
     {
-        id: 13, name: "Thraex", hp: 6, movement: 2, move: true,
+        id: 13, name: "Thraex", health: 6, movement: 2, activate: true,
         rules: "Heroes within range 3 suffer 1 damage. Heroes within range 1 suffer 1 additional damage."
     },
     {
-        id: 14, name: "Gorgon", hp: 7, movement: 4, move: true,
+        id: 14, name: "Gorgon", health: 7, movement: 4, activate: true,
         rules: "Restore to full health. Heroes within range 2 cannot move during the Action phase but can be pushed."
     },
 ]
 
+interface SavedBossCard extends BossCard {
+    currentHealth: number;
+}
+
 interface SavedGame {
     timerEnd?: number;
     currentEvents: Array<EventCard>;
-    currentBosses: Array<BossCard>;
+    drawnSwarms: Array<SwarmCard>;
+    currentBosses: Array<SavedBossCard>;
     eventDeck: Array<EventCard>;
     swarmDeck: Array<SwarmCard>;
     bossDeck: Array<BossCard>;
@@ -372,6 +380,7 @@ class StaticData {
 
         const savedGame: SavedGame = {
             currentEvents: [],
+            drawnSwarms: [],
             currentBosses: [],
             eventDeck: (diff === "medium" ? StaticData.makeEventsMedium() : diff === "hard" ? StaticData.makeEventsHard() : StaticData.makeEventsEasy()),
             swarmDeck: StaticData.makeSwarmDeck(),
@@ -404,6 +413,7 @@ class StaticData {
         if (savedGame.swarmDeck.length === 0)
             savedGame.swarmDeck = this.makeSwarmDeck();
         const swarmCard = savedGame.swarmDeck.splice(0, 1)[0];
+        savedGame.drawnSwarms.push(swarmCard);
         StaticData.save(savedGame);
         return swarmCard;
     }
@@ -411,9 +421,15 @@ class StaticData {
     static drawBoss(savedGame: SavedGame): BossCard | undefined {
         if (savedGame.bossDeck.length === 0) return undefined;
         const bossCard = savedGame.bossDeck.splice(0, 1)[0];
-        savedGame.currentBosses.push(bossCard);
+        savedGame.currentBosses.push({ ...bossCard, currentHealth: bossCard.health });
         StaticData.save(savedGame);
         return bossCard;
+    }
+
+    static addDamageToBoss(savedGame: SavedGame, id: number, val: number) {
+        const boss = savedGame.currentBosses.filter(x => x.id === id)[0];
+        boss.currentHealth -= val;
+        StaticData.save(savedGame);
     }
 
     static removeEvent(savedGame: SavedGame, event: EventCard): void {
@@ -435,6 +451,12 @@ class StaticData {
 
     static save(savedGame: SavedGame) {
         localStorage.setItem(StaticData.storageid_savedGame, JSON.stringify(savedGame));
+    }
+
+    // UTIL
+
+    static getNrOfSwarmCardsDrawn() {
+        return StaticData.getNrOfPlayers() + (StaticData.getDifficulty() === "hard" ? 1 : 0);
     }
 
 }

@@ -47,8 +47,10 @@ class GameScreen extends JScreen {
     }
 
     selectTab(i: number) {
-        this.remakeCurrentEventsBox(i < phases.length ? phases[i] : undefined);
-        this.remakeCurrentBossesBox();
+        const phase: Phase | "settings" = i < phases.length ? phases[i] : "settings";
+        console.log(phase);
+        this.remakeCurrentEventsBox(phase);
+        this.remakeCurrentBossesBox(i, phase);
         this.tabIcons.forEach(tabIcon => tabIcon.removeClass("selected"));
         this.tabIcons[i].addClass("selected");
         this.tabBox.empty();
@@ -61,43 +63,21 @@ class GameScreen extends JScreen {
         }
     }
 
-    remakeCurrentEventsBox(phase?: Phase) {
+    remakeCurrentEventsBox(phase: Phase | "settings") {
         this.currentEventBox.empty();
-        if (!phase) return;
+        if (!phase || phase === "settings" || phase === "event") return;
         this.savedGame.currentEvents.forEach(ev => {
-            if (ev.highlightPhase === phase || phase === "event" || ev.highlightPhase === "all") {
+            if (ev.highlightPhase === phase || ev.highlightPhase === "all") {
                 const eventDiv = this.makeEvent(ev, true);
                 this.currentEventBox.append(eventDiv);
             }
         });
     }
 
-    remakeCurrentBossesBox(phase?: Phase) {
+    remakeCurrentBossesBox(currentTab: number, phase: Phase | "settings") {
         this.currentBossesBox.empty();
-        if (!phase) return;
-        this.savedGame.currentBosses.forEach(ev => this.currentEventBox.append(this.makeBoss(ev)));
-    }
-
-    makeBoss(bossCard: BossCard, isMini = false, isLight = false) {
-        if (!bossCard) return;
-
-        const eventDiv = $(`<div class="event${isMini ? " mini" : ""}"></div>`);
-
-        const title = $(`<h3>${bossCard.name}</h3>`);
-        const rulesStr = isLight ? bossCard.rules.replace("images\\light", "images\\dark") : bossCard.rules;
-        const rules = $(`<div class="rules">${rulesStr}</div>`);
-        console.log(bossCard.rules)
-
-        // const iconsDiv = $(`<div class="icons"></div>`);
-        // bossCard.icons.forEach(icon => {
-        //     const iconDiv = $(`<div class="icon"><img src="./assets/images/dark/${icon}.svg"></div>`);
-        //     iconsDiv.append(iconDiv);
-        // })
-
-        eventDiv.append(title);
-        eventDiv.append(rules);
-        // eventDiv.append(iconsDiv);
-        return eventDiv;
+        if (!phase || phase === "settings" || phase === "spawn") return;
+        this.savedGame.currentBosses.forEach(card => this.currentBossesBox.append(this.makeBoss(card, currentTab)));
     }
 
     // EVENT PHASE
@@ -158,34 +138,106 @@ class GameScreen extends JScreen {
 
     // SPAWN PHASE
 
+    makeSwarm(swarmCard: SwarmCard, index: number, fromOverlay = false) {
+        if (!swarmCard) return;
+
+        const div = $(`<div class="swarm" style="opacity:${100 - index * 15}%"></div>`);
+        const title = $(`<h3>${swarmCard.alienType}</h3>`);
+        const number = $(`<div class="number">${swarmCard.number}x</div>`);
+        const location = $(`<div class="location"><div class="circle">${swarmCard.location === 0 ? "?" : swarmCard.location}</div></div>`);
+
+        div.append(number);
+        div.append(title);
+        div.append(location);
+
+        if (swarmCard.activate) {
+            const danger = $(`<img class="danger" src="./assets/images/${fromOverlay ? "dark" : "light"}/danger.svg">`);
+            location.append(danger);
+        }
+
+        return div;
+    }
+
+    makeBoss(bossCard: SavedBossCard, currentTab: number, isMini = false, fromOverlay = false) {
+        if (!bossCard || bossCard.currentHealth <= 0) return;
+
+        const light = fromOverlay ? "dark" : "light";
+
+        const div = $(`<div class="boss${isMini ? " mini" : ""}"></div>`);
+
+        const title = $(`<h3>${bossCard.name}</h3>`);
+        const image = $(`<img src="./assets/images/boss/${light}/${bossCard.id}.svg">`);
+        const rulesStr = fromOverlay ? bossCard.rules.replace("images\\light", "images\\dark") : bossCard.rules;
+        const rules = $(`<div class="rules">${rulesStr}</div>`);
+        const icons = $(`<div class="icons">
+                <div class="health"><img src="./assets/images/${light}/health.svg">${bossCard.currentHealth}</div>
+                <div class="activate${bossCard.activate ? "" : " hide"}"><img src="./assets/images/${light}/danger.svg"></div>
+                <div class="movement"><img src="./assets/images/${light}/alien_move.svg">${bossCard.movement}</div>
+            </div>`);
+
+        const left = $(`<div class="left"></div>`);
+        const right = $(`<div class="right"></div>`);
+        const row = $(`<div class="row"></div>`);
+
+        left.append(image);
+        right.append(rules);
+
+        row.append(left);
+        row.append(right);
+
+        div.append(title);
+        div.append(row);
+        div.append(icons);
+
+        {
+            const gotoTab = currentTab;
+            const addDamage = (v: number) => {
+                StaticData.addDamageToBoss(this.savedGame, bossCard.id, v);
+                this.selectTab(gotoTab);
+            }
+            const buttons = $(`<div class="buttons"></div>`);
+            const leftButton = $(`<div class="leftButton"></div>`);
+            const rightButton = $(`<div class="rightButton"></div>`);
+            leftButton.on('click', () => addDamage(1));
+            rightButton.on('click', () => addDamage(-1));
+            buttons.append(leftButton);
+            buttons.append(rightButton);
+            div.append(buttons);
+        }
+
+        return div;
+    }
+
     remakeTabSpawn() {
 
         const drawSwarmCard = () => {
             const swarmCard: SwarmCard | undefined = StaticData.drawSwarm(this.savedGame);
             if (!swarmCard) return;
             this.selectTab(1);
-            // show last drawn swarm cards
+            this.showOverlay(this.makeSwarm(swarmCard, 0, true));
         }
 
         const drawBossCard = () => {
             const bossCard: BossCard | undefined = StaticData.drawBoss(this.savedGame);
             if (!bossCard) return;
             this.selectTab(1);
-            // show last drawn swarm cards
         }
 
         this.tabBox.attr("tab", "spawn");
-        this.tabBox.append($(`<h3>ALIEN SPAWN</h3>`));
 
         const drawSwarmCardButton = $(`<div class="button">DRAW SWARM (${this.savedGame.swarmDeck.length})</div>`);
-        drawSwarmCardButton.on('click', () => drawSwarmCard());
+        drawSwarmCardButton.on('click', drawSwarmCard);
         const drawBossCardButton = $(`<div class="button">DRAW BOSS (${this.savedGame.bossDeck.length})</div>`);
-        drawBossCardButton.on('click', () => drawBossCard());
+        drawBossCardButton.on('click', drawBossCard);
+        ([...this.savedGame.drawnSwarms])
+            .reverse()
+            .splice(0, StaticData.getNrOfSwarmCardsDrawn())
+            .forEach((card: SwarmCard, index: number) => this.tabBox.prepend(this.makeSwarm(card, index)));
 
-        // draw last boss and swarm cards
-        // this.savedGame.currentEvents.forEach((ev: EventCard) => this.tabBox.append(this.makeEvent(ev)));
-
+        this.tabBox.prepend($(`<h3>ALIEN SPAWN</h3>`));
         this.tabBox.append(drawSwarmCardButton);
+        this.tabBox.append($(`<div class="separator"><div/>`));
+        this.savedGame.currentBosses.forEach((card: SavedBossCard) => this.tabBox.append(this.makeBoss(card, 1)));
         this.tabBox.append(drawBossCardButton);
 
     }
