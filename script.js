@@ -1160,10 +1160,12 @@ var SetupScreen = /** @class */ (function (_super) {
             var missionType = this.getMissionType();
             var map = this.getMap();
             var slotsArr = SLOTS["extermination"][this.selectedMapId][StaticData.getNrOfPlayers()];
+            var nrPlayersDiv = $("<div class=\"nrPlayers\">Number of Players: ".concat(StaticData.getNrOfPlayers(), "</div>"));
             var tokensDiv = $("<div class=\"tokens\">".concat(slotsArr.length, "x ").concat(missionType.tokenName, "</div>"));
             var slotsDiv_1 = $("<div class=\"slots\"></div>");
             var rulesDiv = $("<div class=\"rules\">".concat(missionType.rules, "</div>"));
             slotsArr.forEach(function (n) { return slotsDiv_1.append($("<div class=\"slot\">".concat(n, "</div>"))); });
+            this.specificsWrapper.append(nrPlayersDiv);
             this.specificsWrapper.append(tokensDiv);
             this.specificsWrapper.append(slotsDiv_1);
             this.specificsWrapper.append(rulesDiv);

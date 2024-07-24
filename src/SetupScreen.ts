@@ -338,12 +338,14 @@ class SetupScreen extends JScreen {
             const map = this.getMap();
             const slotsArr = SLOTS["extermination"][this.selectedMapId][StaticData.getNrOfPlayers()];
 
+            const nrPlayersDiv = $(`<div class="nrPlayers">Number of Players: ${StaticData.getNrOfPlayers()}</div>`);
             const tokensDiv = $(`<div class="tokens">${slotsArr.length}x ${missionType.tokenName}</div>`);
             const slotsDiv = $(`<div class="slots"></div>`);
             const rulesDiv = $(`<div class="rules">${missionType.rules}</div>`);
 
             slotsArr.forEach((n: number) => slotsDiv.append($(`<div class="slot">${n}</div>`)));
 
+            this.specificsWrapper.append(nrPlayersDiv);
             this.specificsWrapper.append(tokensDiv);
             this.specificsWrapper.append(slotsDiv);
             this.specificsWrapper.append(rulesDiv);
