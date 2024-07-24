@@ -92,6 +92,83 @@ body {
   height: 100vh;
 }
 
+#setup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "nasalization";
+  font-weight: bold;
+  font-size: 7vw;
+  color: var(--color_orange);
+  height: 100%;
+  text-align: center;
+}
+#setup h3 {
+  margin: 0 0 7vw 0;
+  font-size: 10vw;
+  color: var(--color_orange);
+}
+#setup .button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 8vw;
+  padding: 2vw;
+  margin-bottom: 2vw;
+  border-radius: 2vw;
+  color: var(--color_gray);
+  background-color: var(--color_orange);
+}
+#setup .back.button,
+#setup .start.button {
+  margin-top: 7vw;
+}
+#setup .chosen h3 {
+  font-size: 7vw;
+}
+#setup .tokens {
+  text-align: center;
+}
+#setup .slots {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10vw;
+}
+#setup .slots .slot {
+  background-color: var(--color_orange);
+  color: var(--color_gray);
+  width: 7vw;
+  height: 7vw;
+  padding: 1vw;
+  margin: 1vw;
+  border-radius: 2vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#setup .rules {
+  overflow-y: scroll;
+  opacity: 10%;
+  max-height: 10vw;
+  border: 1vw solid var(--color_gray);
+  transition: border 1s, opacity 1s, max-height 1s;
+}
+#setup .rules:hover {
+  max-height: 80vw;
+  opacity: 100%;
+  border: 1vw solid var(--color_orange);
+}
+#setup .rules .part {
+  text-align: center;
+  font-size: 5vw;
+  margin-bottom: 2vw;
+}
+
 /*the container must be positioned relative:*/
 .custom-select {
   position: relative;

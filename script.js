@@ -795,7 +795,7 @@ var MenuScreen = /** @class */ (function (_super) {
         }
         _this.div.append($("<img class=\"titleImage\" src=\"./assets/images/title2.svg\">"));
         _this.div.append(wrapper);
-        var footer = $("<div class=\"footer\"><span style=\"float:left\"></span><span>version 0.1</span><span style=\"float:right\"></span></div>");
+        var footer = $("<div class=\"footer\"><span style=\"float:left\"></span><span>version 0.2</span><span style=\"float:right\"></span></div>");
         _this.div.append(footer);
         _this.goBack();
         return _this;
@@ -864,9 +864,12 @@ var MenuScreen = /** @class */ (function (_super) {
     };
     MenuScreen.prototype.startNewGame = function () {
         var _this = this;
+        console.log("test");
         if (this.sure || !StaticData.load()) {
-            StaticData.initSavedGame();
-            this.main.gameScreen.show();
+            this.main.setupScreen.init(function () {
+                StaticData.initSavedGame();
+                _this.main.gameScreen.show();
+            });
         }
         else {
             this.sure = true;
@@ -882,14 +885,332 @@ var MenuScreen = /** @class */ (function (_super) {
     return MenuScreen;
 }(JScreen));
 ///<reference path="Data.ts" />
+///<reference path="JScreen.ts" />
+var SLOTS = {
+    "extermination": {
+        "crash site": [
+            [],
+            [7, 9, 10],
+            [2, 6, 9, 10],
+            [1, 3, 7, 9, 10],
+            [1, 4, 7, 8, 9, 10],
+            [2, 3, 5, 9, 10, 11, 12]
+        ],
+        "abandoned lab": [
+            [1, 4, 11],
+            [1, 4, 11],
+            [2, 4, 6, 11],
+            [2, 4, 6, 9, 10],
+            [1, 3, 5, 7, 8, 11],
+            [1, 4, 5, 7, 9, 10, 11]
+        ],
+        "shallow river": [
+            [6, 9, 11],
+            [6, 9, 11],
+            [5, 6, 9, 11],
+            [5, 6, 7, 9, 11],
+            [2, 5, 6, 7, 9, 11],
+            [2, 5, 6, 7, 9, 11, 12]
+        ],
+        "infested ruins": [
+            [6, 7, 11],
+            [6, 7, 11],
+            [6, 7, 9, 11],
+            [2, 6, 7, 9, 11],
+            [2, 5, 6, 7, 9, 11],
+            [2, 5, 6, 7, 9, 10, 11]
+        ],
+    },
+    "capture": {
+        "crash site": [
+            [6, 10],
+            [6, 10],
+            [7, 10, 12],
+            [1, 9, 10, 11],
+            [3, 6, 10, 11, 12],
+            [1, 3, 7, 9, 10, 11]
+        ],
+        "abandoned lab": [
+            [5, 11],
+            [5, 11],
+            [3, 7, 11],
+            [2, 5, 6, 11],
+            [2, 3, 7, 9, 11],
+            [2, 5, 6, 7, 9, 11]
+        ],
+        "shallow river": [
+            [7, 12],
+            [7, 12],
+            [6, 7, 12],
+            [6, 7, 11, 12],
+            [6, 7, 9, 11, 12],
+            [2, 6, 7, 9, 11, 12]
+        ],
+        "infested ruins": [
+            [8, 9],
+            [8, 9],
+            [8, 9, 12],
+            [4, 8, 9, 12],
+            [4, 7, 8, 9, 12],
+            [4, 7, 8, 9, 10, 12]
+        ],
+    },
+    "demolition": {
+        "crash site": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "abandoned lab": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "shallow river": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "infested ruins": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+    },
+    "recon": {
+        "crash site": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "abandoned lab": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "shallow river": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "infested ruins": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+    },
+    "exploration": {
+        "crash site": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "abandoned lab": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "shallow river": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "infested ruins": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+    },
+};
+var SetupScreen = /** @class */ (function (_super) {
+    __extends(SetupScreen, _super);
+    function SetupScreen(main) {
+        var _this = _super.call(this, "setup") || this;
+        _this.main = main;
+        _this.maps = {
+            "crash site": { name: "Crash Site", img: "", difficulty: 0 },
+            "abandoned lab": { name: "Abandoned Lab", img: "", difficulty: 0 },
+            "shallow river": { name: "Shallow River", img: "", difficulty: 0 },
+            "infested ruins": { name: "Infested Ruins", img: "", difficulty: 0 },
+        };
+        _this.missionTypes = {
+            "extermination": {
+                name: "Extermination", img: "", difficulty: 0, tokenName: "Extermination Token",
+                rules: "<div class=\"part\">OBJECTIVE: The nests found by the exploration team are marked on the Map. It is your job to destroy them all. To win the Mission,exterminate the nests by activating all Extermination tokens.</div>\n                    <div class=\"part\">SPECIAL SETUP: Fill the Objective slots with 1 random Extermination token each. Return the remaining tokens to the box.</div>\n                    <div class=\"part\">ACTION: Any Hero adjacent to an Extermination token may allocate dice to it. When all slots are filled, the token is ready. At the End of the Round Phase, remove from the Map all ready Extermination tokens.</div>"
+            },
+            "exploration": {
+                name: "Exploration", img: "", difficulty: 0, tokenName: "Exploration Token",
+                rules: "<div class=\"part\"></div>\n                <div class=\"part\"></div>\n                <div class=\"part\"></div>"
+            },
+            "capture": {
+                name: "Capture", img: "", difficulty: 0, tokenName: "Capture Token<br />+ 2 Trap Token in each",
+                rules: "<div class=\"part\">OBJECTIVE: Special traps are exactly what it takes to capture living specimens, but they need the right timing to activate. To win the game, all Traps must successfully capture an Alien.</div>\n                <div class=\"part\">SPECIAL SETUP RULES: According to the number of players indicated for each Map, fill the listed Objective slots with 1 random Capture token each. Then, place 2 Trap tokens adjacent to each Capture token. Return the remaining tokens to the box</div>\n                <div class=\"part\">Activating Traps: Any Hero adjacent to a Capture token may allocate dice to it. When all slots are filled, the Capture token is ready. At the end of the Action Phase, each ready Capture token is activated and Heroes must choose 1 Trap adjacent to the tokens to close.</div>\n                <div class=\"part\">Resolving Traps: If a Trap closes with a Swarm Alien figure on it, the Capture is considered successful! Remove the Trap token from the Map and return the Swarm to the reserve. If a Trap closes without a Swarm on it, the Capture is considered unsuccessful and the Trap remains on the Map. Bosses are unaffected by Traps.</div>\n                <div class=\"part\">Moving Around: Spaces occupied by Traps or Capture tokens are not considered Blocking Spaces.</div>"
+            },
+            "recon": {
+                name: "Recon", img: "", difficulty: 0, tokenName: "Target Token",
+                special: "1x Recon Token per Hero in Starting Area",
+                rules: "<div class=\"part\"></div>\n                <div class=\"part\"></div>\n                <div class=\"part\"></div>"
+            },
+            "demolition": {
+                name: "Demolition", img: "", difficulty: 0, tokenName: "Target Token",
+                special: "1x Demo4 and 1x Demo3 per player.",
+                rules: "<div class=\"part\"></div>\n                <div class=\"part\"></div>\n                <div class=\"part\"></div>"
+            },
+        };
+        _this.objectives = {};
+        _this.currentPhase = 0;
+        _this.chosenMap = $("<div class=\"chosen\"></div>");
+        _this.chosenMissionType = $("<div class=\"chosen\"></div>");
+        _this.chooseMap = $("<div class=\"chooseMap\"><h3>Game Map:</h3></div>");
+        Object.keys(_this.maps).forEach(function (mapId) {
+            var div = $("<div class=\"map button\">".concat(_this.getMap(mapId).name, "</div>"));
+            div.on('click', function () { return _this.setMapAndContinue(mapId); });
+            _this.chooseMap.append(div);
+        });
+        _this.chooseMissionType = $("<div class=\"chooseMissionType\"><h3>Mission Type:</h3></div>");
+        Object.keys(_this.missionTypes).forEach(function (typeId) {
+            var div = $("<div class=\"missionType button\">".concat(_this.getMissionType(typeId).name, "</div>"));
+            div.on('click', function () { return _this.setMissionTypeAndContinue(typeId); });
+            _this.chooseMissionType.append(div);
+        });
+        _this.specificsWrapper = $("<div class=\"rulesWrapper\"></div>");
+        _this.startGameButton = $("<div class=\"start button\">Start Game</div>");
+        _this.startGameButton.on('click', function () { return _this.startGame(); });
+        var backButton = $("<div class=\"back button\">Back</div>");
+        backButton.on('click', function () { return _this.showPhase(_this.currentPhase - 1); });
+        _this.div.append(_this.chosenMap);
+        _this.div.append(_this.chosenMissionType);
+        _this.div.append(_this.chooseMap);
+        _this.div.append(_this.chooseMissionType);
+        _this.div.append(_this.specificsWrapper);
+        _this.div.append(_this.startGameButton);
+        _this.div.append(backButton);
+        return _this;
+    }
+    SetupScreen.prototype.getMap = function (id) { return this.maps[id !== null && id !== void 0 ? id : this.selectedMapId]; };
+    ;
+    SetupScreen.prototype.getMissionType = function (id) { return this.missionTypes[id !== null && id !== void 0 ? id : this.selectedMissionTypeId]; };
+    ;
+    SetupScreen.prototype.startGame = function () {
+        if (this.callback)
+            this.callback();
+    };
+    SetupScreen.prototype.showPhase = function (phase) {
+        this.currentPhase = phase;
+        this.startGameButton.hide();
+        this.chosenMap.hide();
+        this.chosenMap.hide();
+        this.chosenMissionType.hide();
+        this.chooseMap.hide();
+        this.chooseMissionType.hide();
+        this.specificsWrapper.hide();
+        if (phase < 0) {
+            this.main.menuScreen.show();
+            return;
+        }
+        if (phase == 0) {
+            this.chooseMap.show();
+            return;
+        }
+        if (phase == 1) {
+            this.showSelectedMap();
+            this.chooseMissionType.show();
+            return;
+        }
+        if (phase == 2) {
+            this.showSelectedMap();
+            this.showSelectedMissionType();
+            this.specificsWrapper.empty();
+            var missionType = this.getMissionType();
+            var map = this.getMap();
+            var slotsArr = SLOTS["extermination"][this.selectedMapId][StaticData.getNrOfPlayers()];
+            var tokensDiv = $("<div class=\"tokens\">".concat(slotsArr.length, "x ").concat(missionType.tokenName, "</div>"));
+            var slotsDiv_1 = $("<div class=\"slots\"></div>");
+            var rulesDiv = $("<div class=\"rules\">".concat(missionType.rules, "</div>"));
+            slotsArr.forEach(function (n) { return slotsDiv_1.append($("<div class=\"slot\">".concat(n, "</div>"))); });
+            this.specificsWrapper.append(tokensDiv);
+            this.specificsWrapper.append(slotsDiv_1);
+            this.specificsWrapper.append(rulesDiv);
+            if (missionType.special)
+                this.specificsWrapper.append($("<div class=\"special\">".concat(missionType.special, "</div>")));
+            this.startGameButton.show();
+            this.specificsWrapper.show();
+            return;
+        }
+    };
+    SetupScreen.prototype.showSelectedMap = function () {
+        this.chosenMap.empty();
+        this.chosenMap.append($("<h3>Map: ".concat(this.getMap().name, "</h3>")));
+        this.chosenMap.show();
+    };
+    SetupScreen.prototype.showSelectedMissionType = function () {
+        this.chosenMissionType.empty();
+        this.chosenMissionType.append($("<h3>Mission: ".concat(this.getMissionType().name, "</h3>")));
+        this.chosenMissionType.show();
+    };
+    SetupScreen.prototype.setMapAndContinue = function (mapId) {
+        this.selectedMapId = mapId;
+        this.showPhase(1);
+    };
+    SetupScreen.prototype.setMissionTypeAndContinue = function (missionTypeId) {
+        this.selectedMissionTypeId = missionTypeId;
+        this.showPhase(2);
+    };
+    SetupScreen.prototype.init = function (callback) {
+        this.show();
+        this.showPhase(0);
+        this.callback = callback;
+    };
+    return SetupScreen;
+}(JScreen));
+///<reference path="Data.ts" />
 ///<reference path="MenuScreen.ts" />
 ///<reference path="GameScreen.ts" />
+///<reference path="SetupScreen.ts" />
 var Main = /** @class */ (function () {
     function Main() {
         this.menuScreen = new MenuScreen(this);
         this.gameScreen = new GameScreen(this);
+        this.setupScreen = new SetupScreen(this);
         this.menuScreen.show();
         // setTimeout(() => this.menuScreen.startNewGame(), 333);
+        // setTimeout(() => this.menuScreen.startNewGame(), 666);
         // setTimeout(() => this.menuScreen.continueSavedGame(), 333);
         // setTimeout(() => {
         //     StaticData.drawEvent(this.gameScreen.savedGame);

@@ -88,7 +88,7 @@ class MenuScreen extends JScreen {
 
         this.div.append($(`<img class="titleImage" src="./assets/images/title2.svg">`));
         this.div.append(wrapper);
-        const footer = $(`<div class="footer"><span style="float:left"></span><span>version 0.1</span><span style="float:right"></span></div>`);
+        const footer = $(`<div class="footer"><span style="float:left"></span><span>version 0.2</span><span style="float:right"></span></div>`);
         this.div.append(footer);
 
         this.goBack();
@@ -168,9 +168,12 @@ class MenuScreen extends JScreen {
 
     sure: boolean;
     startNewGame() {
+        console.log("test")
         if (this.sure || !StaticData.load()) {
-            StaticData.initSavedGame();
-            this.main.gameScreen.show();
+            this.main.setupScreen.init(()=>{
+                StaticData.initSavedGame();
+                this.main.gameScreen.show();
+            });
         } else {
             this.sure = true;
             this.newGameButton.html("SURE?");
